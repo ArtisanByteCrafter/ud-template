@@ -39,6 +39,10 @@ Process {
     $Configuration.dashboard.rootmodule = "$ProjectName.psm1"
     $Configuration | ConvertTo-Json -Depth 99 | Set-Content -Path (Join-Path $PSScriptRoot dbconfig.json)
 
+    Foreach ($folder in 'src','assets') {
+        New-Item -ItemType Directory -Path (Join-Path $PSScriptRoot $folder) > $null
+    } 
+
     Set-Content -Path ("{0}\{1}.psm1" -f $PSScriptRoot,$ProjectName) -Value $ModuleFileContents
 
     $ModuleManifestSplat = @{
