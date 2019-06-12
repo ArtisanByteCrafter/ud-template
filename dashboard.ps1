@@ -1,5 +1,7 @@
+$ConfigurationFile = Get-Content (Join-Path $PSScriptRoot dbconfig.json) | ConvertFrom-Json
+
 Try {
-    Import-Module (Join-Path $PSScriptRoot "*.psm1") -ErrorAction Stop
+    Import-Module (Join-Path $PSScriptRoot $ConfigurationFile.dashboard.rootmodule) -ErrorAction Stop
 } Catch {
     Write-Warning "Valid function module not found. Generate one by running $(Join-Path $PSScriptRoot New-UDProject.ps1) -ProjectName 'myProject'"
     break;
@@ -12,8 +14,6 @@ $PageFolder = Get-ChildItem (Join-Path $PSScriptRoot pages)
 $Pages = Foreach ($Page in $PageFolder){
     . (Join-Path $PSScriptRoot "pages\$Page")
 }
-
-$ConfigurationFile = Get-Content (Join-Path $PSScriptRoot dbconfig.json) | ConvertFrom-Json
 
 $Initialization = New-UDEndpointInitialization -Module @(Join-Path $PSScriptRoot $ConfigurationFile.dashboard.rootmodule)
 
