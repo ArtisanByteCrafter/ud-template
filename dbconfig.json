@@ -1,0 +1,7 @@
+{
+    "dashboard": {
+        "port": "10000",
+        "title": "",
+        "rootmodule": ""
+    }
+}

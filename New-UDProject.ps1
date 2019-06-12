@@ -2,14 +2,15 @@
 .SYNOPSIS
     Creates the framework for a new dashboard project
 .DESCRIPTION
-    Long description
+    Creates a module for the project that imports all *.ps1 located in the /src folder.
 .EXAMPLE
-    PS C:\> New-UDProject -ProjectName MyProject 
-    Explanation of what the example does
+    PS C:\> New-UDProject -ProjectName myProject 
+    Creates a new project called myProject. The dashboard will use this for it's title,
+    but this is configurable in dbconfig.json
 .INPUTS
     Inputs (if any)
 .OUTPUTS
-    Output (if any)
+    PSCustomObject of the dashboard module name and location
 .NOTES
     General notes
 #>
@@ -22,85 +23,21 @@ param(
 
 Begin {
 $ModuleFileContents = @'
-$Functions = Get-ChildItem $PSScriptRoot\src\*.ps1 -Recurse -ErrorAction SilentlyContinue
-Foreach($import in $Functions) {
-    Try {
-        . $import.fullname
-    }
-    Catch {
-        Write-Error "Failed to import function $($import.fullname)"
-    }
+$Source = Get-ChildItem $PSScriptRoot\src\*.ps1 -Recurse -ErrorAction SilentlyContinue
+
+Foreach($import in $Source) {
+     . $import.fullname
 }
 '@
-# dot-source components
-$SampleDashboard = @'
-Import-Module (Join-Path $PSScriptRoot "*.psm1")
 
-. (Join-Path $PSScriptRoot "themes\*.ps1")
-
-$MyDashboard = New-UDDashboard -Title "Sample Dashboard" -Theme $SampleTheme -Content {
-    New-UDCard -Title "Sample Dashboard Card"
-}
-Start-UDDashboard -Port 10000 -Dashboard $MyDashboard -Name 'Sample Dashboard'
-'@
-
-$SampleTheme = @'
-$SampleTheme = New-UDTheme -Name 'SampleTheme' -Definition @{
-    UDDashboard = @{
-        BackgroundColor = "#333333"
-        FontColor       = "#FFFFFF"
-    }
-    UDNavBar    = @{
-        BackgroundColor = "#333333"
-        FontColor       = "#FFFFFF"
-    }
-    UDFooter    = @{
-        BackgroundColor = "#333333"
-        FontColor       = "#FFFFFF"
-    }
-    UDCard      = @{
-        BackgroundColor = "#444444"
-        FontColor       = "#FFFFFF"
-    }
-    UDInput     = @{
-        BackgroundColor = "#444444"
-        FontColor       = "#FFFFFF"
-    }
-    UDGrid      = @{
-        BackgroundColor = "#444444"
-        FontColor       = "#FFFFFF"
-    }
-    UDChart     = @{
-        BackgroundColor = "#444444"
-        FontColor       = "#FFFFFF"
-    }
-    UDMonitor   = @{
-        BackgroundColor = "#444444"
-        FontColor       = "#FFFFFF"
-    }
-    UDTable     = @{
-        BackgroundColor = "#444444"
-        FontColor       = "#FFFFFF"
-    }
-    '.btn'      = @{
-        'color'            = "#ffffff"
-        'background-color' = "#a80000"
-        
-    }
-    '.btn:hover'      = @{
-        'color'            = "#ffffff"
-        'background-color' = "#C70303"
-    }
-}
-'@
+$Configuration = Get-Content (Join-Path $PSScriptRoot dbconfig.json) | ConvertFrom-Json
 
 }
 Process {
-    Foreach ($folder in "assets","pages","src","themes") {
-        New-Item -Path (Join-Path $PSScriptRoot $Folder) -ItemType Directory > $null
-    }
-    
 
+    $Configuration.dashboard.title = $ProjectName
+    $Configuration.dashboard.rootmodule = "$ProjectName.psm1"
+    $Configuration | ConvertTo-Json -Depth 99 | Set-Content -Path (Join-Path $PSScriptRoot dbconfig.json)
 
     Set-Content -Path ("{0}\{1}.psm1" -f $PSScriptRoot,$ProjectName) -Value $ModuleFileContents
 
@@ -110,14 +47,13 @@ Process {
     }
     New-ModuleManifest @ModuleManifestSplat
 
-    Set-Content -Path ("{0}\dashboard.ps1" -f $PSScriptRoot) -Value $SampleDashboard
-    Set-Content -Path ("{0}\themes\SampleTheme.ps1" -f $PSScriptRoot) -Value $SampleTheme
 }
 End {
 
     [PSCustomObject]@{
         'Name' = $ProjectName
-        'ModuleFile' = ("{0}\{1}.psd1" -f $PSScriptRoot,$ProjectName)
+        'RootModule' = (Join-Path $PSScriptRoot $Configuration.dashboard.rootmodule )
+        'ConfigFile' = (Join-Path $PSScriptRoot dbconfig.json)
     }
 }
     
