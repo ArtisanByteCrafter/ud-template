@@ -40,7 +40,12 @@ Process {
     $Configuration | ConvertTo-Json -Depth 99 | Set-Content -Path (Join-Path $PSScriptRoot dbconfig.json)
 
     Foreach ($folder in 'src','assets') {
-        New-Item -ItemType Directory -Path (Join-Path $PSScriptRoot $folder) > $null
+        $NewItemSplat = @{
+            ItemType = 'Directory'
+            Path = (Join-Path $PSScriptRoot $folder)
+            ErrorAction = 'SilentlyContinue'
+        }
+        New-Item @NewItemSplat > $null
     } 
 
     Set-Content -Path ("{0}\{1}.psm1" -f $PSScriptRoot,$ProjectName) -Value $ModuleFileContents
