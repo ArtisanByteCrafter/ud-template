@@ -12,7 +12,7 @@ Try {
 $PageFolder = Get-ChildItem (Join-Path $PSScriptRoot pages)
 
 $Pages = Foreach ($Page in $PageFolder){
-    . (Join-Path $PSScriptRoot "pages\$Page")
+    . $Page.Fullname
 }
 
 $Initialization = New-UDEndpointInitialization -Module @(Join-Path $PSScriptRoot $ConfigurationFile.dashboard.rootmodule)
