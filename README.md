@@ -3,7 +3,13 @@ A scaffolded Template for UniversalDashboard Projects
 
 ## To create a new project:
 
-Run the included script with a single parameter `New-UDProject.ps1 -ProjectName 'myProject'`
+```powershell
+PS> Import-Module ud-template.psd1
+
+PS> New-UDProject -ProjectName 'MyApp' -Destination C:\Temp -SetAsCurrentLocation
+
+C:\Temp> .\dashboard.ps1
+```
 
 ## v1:
 
