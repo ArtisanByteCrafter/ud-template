@@ -18,8 +18,10 @@ steps:
     pwsh: true
 
 - task: PublishTestResults@2
+  displayName: 'Publish Test Results'
   inputs:
     testResultsFormat: 'NUnit'
+    searchFolder: '$(Build.ArtifactStagingDirectory)'
     testResultsFiles: '*.Results.xml'
     mergeTestResults: true
     failTaskOnFailedTests: true
