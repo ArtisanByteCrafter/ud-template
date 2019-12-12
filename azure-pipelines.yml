@@ -20,7 +20,7 @@ steps:
 - task: PublishTestResults@2
   inputs:
     testResultsFormat: 'NUnit'
-    testResultsFiles: '**/*.Results.xml'
+    testResultsFiles: '*.Results.xml'
     mergeTestResults: true
     failTaskOnFailedTests: true
     testRunTitle: 'Test Run'
