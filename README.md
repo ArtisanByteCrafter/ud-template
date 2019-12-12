@@ -1,10 +1,13 @@
-# ud-template
+# UDTemplate
+
+[![Build Status](https://artisanbytecrafter.visualstudio.com/UDTemplate/_apis/build/status/ArtisanByteCrafter.ud-template?branchName=master)](https://artisanbytecrafter.visualstudio.com/UDTemplate/_build/latest?definitionId=4&branchName=master)
+
 A scaffolded Template for UniversalDashboard Projects
 
 ## To create a new project:
 
 ```powershell
-PS> Import-Module ud-template.psd1
+PS> Import-Module UDTemplate
 
 PS> New-UDProject -ProjectName 'MyApp' -Destination C:\Temp -SetAsCurrentLocation
 
