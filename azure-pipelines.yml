@@ -1,3 +1,6 @@
+# YAML spec:
+# https://aka.ms/yaml
+
 pool:
   vmImage: windows-latest
 
@@ -5,6 +8,9 @@ trigger:
   branches:
     include:
       - master
+  tags:
+    include:
+      - '*'
 
 pr:
   - master
@@ -50,6 +56,7 @@ steps:
 
 - task: PowerShell@2
   displayName: 'Deploy to PSGallery'
+  condition: and(succeeded(), startsWith(variables['Build.SourceBranch'], 'refs/tags/'))
   inputs:
     targetType: filePath
     filePath: ./Build/build.ps1
