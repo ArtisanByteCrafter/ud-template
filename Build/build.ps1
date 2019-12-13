@@ -44,7 +44,7 @@ Switch ($true) {
         # Copy module folder to build folder
         $copyItemSplat = @{
             Path = (Join-Path $PSModuleRoot UDTemplate)
-            Destination = 'C:\Temp'
+            Destination = $env:Build_ArtifactStagingDirectory
             Recurse = $true
             Container = $true
         }
