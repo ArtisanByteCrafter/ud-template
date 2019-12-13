@@ -13,7 +13,7 @@ PS> New-UDProject -ProjectName 'MyApp' -Destination C:\Temp -SetAsCurrentLocatio
 C:\Temp> .\dashboard.ps1
 ```
 
-## v2
+## v2.
 
 **This module does the following:**
 
