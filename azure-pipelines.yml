@@ -1,0 +1,41 @@
+pool:
+  vmImage: windows-latest
+
+steps:
+- task: PowerShell@2
+  displayName: 'Pester Tests - Windows Powershell'
+  inputs:
+    filePath: '.\Build\build.ps1'
+    arguments: '-Test'
+    failOnStderr: true
+
+- task: PowerShell@2
+  displayName: 'Pester Tests - Powershell Core'
+  inputs:
+    filePath: './Build/build.ps1'
+    arguments: '-Test'
+    failOnStderr: true
+    pwsh: true
+
+- task: PublishTestResults@2
+  displayName: 'Publish Test Results'
+  inputs:
+    testResultsFormat: 'NUnit'
+    searchFolder: '$(Build.ArtifactStagingDirectory)'
+    testResultsFiles: '*.Results.xml'
+    mergeTestResults: true
+    failTaskOnFailedTests: true
+    testRunTitle: 'Test Run'
+
+- task: PowerShell@2
+  displayName: 'Build Module Artifact'
+  inputs:
+    filePath: '.\Build\build.ps1'
+    arguments: '-Build'
+    failOnStderr: true
+
+- task: PublishPipelineArtifact@1
+  displayName: 'Publish Module Artifact'
+  inputs:
+    path: $(Build.ArtifactStagingDirectory)\UDTemplate
+    artifact: UDTemplate

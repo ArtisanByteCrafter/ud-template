@@ -2,8 +2,9 @@ $ConfigurationFile = Get-Content (Join-Path $PSScriptRoot dbconfig.json) | Conve
 
 Try {
     Import-Module (Join-Path $PSScriptRoot $ConfigurationFile.dashboard.rootmodule) -ErrorAction Stop
-} Catch {
-    Write-Warning "Valid function module not found. Generate one by running $(Join-Path $PSScriptRoot New-UDProject.ps1) -ProjectName 'myProject'"
+}
+Catch {
+    Write-Warning "Valid function module not found. Generate one by running the 'New-UDProject' command."
     break;
 }
 
@@ -11,16 +12,16 @@ Try {
 
 $PageFolder = Get-ChildItem (Join-Path $PSScriptRoot pages)
 
-$Pages = Foreach ($Page in $PageFolder){
+$Pages = Foreach ($Page in $PageFolder) {
     . $Page.Fullname
 }
 
 $Initialization = New-UDEndpointInitialization -Module @(Join-Path $PSScriptRoot $ConfigurationFile.dashboard.rootmodule)
 
-$DashboardParams=@{
-    Title = $ConfigurationFile.dashboard.title
-    Theme = $SampleTheme
-    Pages = $Pages
+$DashboardParams = @{
+    Title                  = $ConfigurationFile.dashboard.title
+    Theme                  = $DarkTheme
+    Pages                  = $Pages
     EndpointInitialization = $Initialization
 }
 
