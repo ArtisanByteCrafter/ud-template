@@ -33,3 +33,9 @@ steps:
     filePath: '.\Build\build.ps1'
     arguments: '-Build'
     failOnStderr: true
+
+- task: PublishPipelineArtifact@1
+  displayName: 'Publish Module Artifact'
+  inputs:
+    path: $(Build.ArtifactStagingDirectory)\UDTemplate
+    artifact: UDTemplate
