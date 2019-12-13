@@ -13,7 +13,7 @@ PS> New-UDProject -ProjectName 'MyApp' -Destination C:\Temp -SetAsCurrentLocatio
 C:\Temp> .\dashboard.ps1
 ```
 
-## v2:
+## v2
 
 **This module does the following:**
 
@@ -24,5 +24,3 @@ C:\Temp> .\dashboard.ps1
 * Initializes and sources all functions defined by the root module, which in turn sources all functions in /src. This means any *.ps1 files in /src automatically are availabe in all runspaces.
 
 * Creates a page for each page.ps1 found in /pages. A home page is included by default.
-
-

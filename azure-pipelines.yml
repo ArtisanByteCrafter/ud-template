@@ -1,6 +1,11 @@
 pool:
   vmImage: windows-latest
 
+trigger:
+  branches:
+    include:
+      - master
+
 steps:
 - task: PowerShell@2
   displayName: 'Pester Tests - Windows Powershell'
