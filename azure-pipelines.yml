@@ -26,3 +26,10 @@ steps:
     mergeTestResults: true
     failTaskOnFailedTests: true
     testRunTitle: 'Test Run'
+
+- task: PowerShell@2
+  displayName: 'Build Module Artifact'
+  inputs:
+    filePath: '.\Build\build.ps1'
+    arguments: '-Build'
+    failOnStderr: true
