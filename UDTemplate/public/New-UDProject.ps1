@@ -45,7 +45,7 @@ Function New-UDProject {
 
     )
     Begin {
-        $TemplateRoot = Split-Path (Split-Path $PSScriptRoot -Parent) -Parent
+        $TemplateRoot = (Split-Path $PSScriptRoot -Parent)
         $ProjectRoot = (Join-Path $Destination $ProjectName)
 
     }
@@ -77,15 +77,8 @@ Function New-UDProject {
 
         # Setup config files within the new project root
         
-        $FilesToCopy = @(
-            'dashboard.ps1'
-        )
-
-        Foreach ($File in $FilesToCopy) {
-            Get-Content (Join-Path (Join-Path $TemplateRoot UDTemplate ) $File) | 
-            Set-Content (Join-Path $ProjectRoot $File)
-        }
-
+        Get-Content  (Join-Path $TemplateRoot "dashboard.ps1") | 
+        Set-Content (Join-Path $ProjectRoot "dashboard.ps1")
 
         $Configuration = @{
             'Dashboard' = @{
