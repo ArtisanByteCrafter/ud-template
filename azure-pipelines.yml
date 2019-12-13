@@ -6,6 +6,9 @@ trigger:
     include:
       - master
 
+pr:
+  - master
+  
 steps:
 - task: PowerShell@2
   displayName: 'Pester Tests - Windows Powershell'
