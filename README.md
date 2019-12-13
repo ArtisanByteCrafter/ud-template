@@ -10,7 +10,6 @@ A scaffolded Template for UniversalDashboard Projects
 PS> Install-Module UDTemplate -Scope CurrentUser
 PS> Import-Module UDTemplate
 PS> New-UDProject -ProjectName 'MyApp' -Destination C:\Temp -SetAsCurrentLocation
-
 C:\Temp> .\dashboard.ps1
 ```
 
