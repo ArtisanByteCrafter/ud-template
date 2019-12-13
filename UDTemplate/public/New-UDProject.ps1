@@ -1,18 +1,26 @@
 Function New-UDProject {
     <#
-.SYNOPSIS
-    Creates the framework for a new dashboard project
-.DESCRIPTION
-    Creates a module for the project that imports all *.ps1 located in the /src folder.
-.EXAMPLE
-    PS C:\> New-UDProject -ProjectName myProject 
-    Creates a new project called myProject. The dashboard will use this for it's title,
-    but this is configurable in dbconfig.json
-.INPUTS
+    .SYNOPSIS
+    Creates the folder structure for a new UD project and sets some defaults for a new dashboard.
+    .DESCRIPTION
+    Creates folder structure, sets a default port, and sets dashboard to import all .ps1 files in /src
+    .EXAMPLE
+    PS C:\> New-UDProject -ProjectName myProject -Port 8080 -Destination C:\Temp
+
+    Creates a new project called myProject, configures the listening port as 8080, at C:\Temp.
+    .PARAMETER ProjectName
+    The name of the project. The dashboard will use this value for it's title, but this is configurable in dbconfig.json
+    .PARAMETER Destination
+    The folder where the dashboard project will be located
+    .PARAMETER Port
+    The port on which to listen. The default is port 80.
+    .PARAMETER SetAsCurrentLocation
+    If included, this parameter will change the current working directory to the new project root after creation.
+    .INPUTS
     Inputs (if any)
-.OUTPUTS
+    .OUTPUTS
     PSCustomObject of the dashboard module name and location
-.NOTES
+    .NOTES
     General notes
 #>
     [cmdletbinding()]
@@ -30,7 +38,7 @@ Function New-UDProject {
         )]
         [string] $Destination,
 
-        [ValidateRange(1,65535)]
+        [ValidateRange(1, 65535)]
         [string] $Port = 80,
 
         [Switch] $SetAsCurrentLocation
@@ -75,14 +83,14 @@ Function New-UDProject {
 
         Foreach ($File in $FilesToCopy) {
             Get-Content (Join-Path (Join-Path $TemplateRoot UDTemplate ) $File) | 
-                Set-Content (Join-Path $ProjectRoot $File)
+            Set-Content (Join-Path $ProjectRoot $File)
         }
 
 
         $Configuration = @{
             'Dashboard' = @{
-                'Port' = $Port
-                'Title' = $ProjectName
+                'Port'       = $Port
+                'Title'      = $ProjectName
                 'RootModule' = "$ProjectName.psm1"
             }
         }
@@ -92,7 +100,7 @@ Function New-UDProject {
         # Create the module manifest psd1 for the project
         
         $ModuleManifestSplat = @{
-            'Path' = "{0}.psd1" -f (Join-Path $ProjectRoot $ProjectName)
+            'Path'       = "{0}.psd1" -f (Join-Path $ProjectRoot $ProjectName)
             'RootModule' = "$ProjectName.psm1"
         }
 
@@ -179,8 +187,8 @@ $DarkTheme = New-UDTheme -Name 'Dark' -Definition @{
         }
 
         [PSCustomObject]@{
-            'Name'       = $ProjectName
-            'Root Module' = $Configuration.dashboard.rootmodule
+            'Name'               = $ProjectName
+            'Root Module'        = $Configuration.dashboard.rootmodule
             'Configuration File' = (Join-Path $ProjectRoot dbconfig.json)
         }
     }

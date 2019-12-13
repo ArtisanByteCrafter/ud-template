@@ -4,19 +4,18 @@
 
 A scaffolded Template for UniversalDashboard Projects
 
-## To create a new project:
+## Quickstart
 
 ```powershell
+PS> Install-Module UDTemplate -Scope CurrentUser
 PS> Import-Module UDTemplate
-
 PS> New-UDProject -ProjectName 'MyApp' -Destination C:\Temp -SetAsCurrentLocation
-
 C:\Temp> .\dashboard.ps1
 ```
 
-## v1:
+## v2:
 
-**This script does the following:**
+**This module does the following:**
 
 * sets a module for the project that automatically sources .ps1 files in the `src` folder
 
