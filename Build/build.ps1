@@ -68,7 +68,7 @@ Switch ($true) {
                 ErrorAction = 'Stop'
             }
 
-            Publish-Module @deploySplat -WhatIf
+            Publish-Module @deploySplat
         }
         Catch {
             throw $_
