@@ -6,6 +6,9 @@ trigger:
     include:
       - master
 
+pr:
+  - master
+  
 steps:
 - task: PowerShell@2
   displayName: 'Pester Tests - Windows Powershell'
@@ -44,3 +47,13 @@ steps:
   inputs:
     path: $(Build.ArtifactStagingDirectory)\UDTemplate
     artifact: UDTemplate
+
+- task: PowerShell@2
+  displayName: 'Deploy to PSGallery'
+  inputs:
+    targetType: filePath
+    filePath: ./Build/build.ps1
+    arguments: '-Deploy'
+  enabled: true
+  env:
+    NugetApiKey: $(NuGetApiKey)
